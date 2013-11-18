@@ -1,9 +1,8 @@
 class CreateDrinks < ActiveRecord::Migration
-  def self.up
+  def up
     create_table :drinks do |drink|
       drink.string     :booze
       drink.string     :glass
-      drink.interger   :id
       drink.string     :mixer
       drink.string     :name
 
@@ -12,7 +11,7 @@ class CreateDrinks < ActiveRecord::Migration
     add_index :drinks
   end
 
-  def self.down
+  def down
     drop_table :drinks 
   end
 end

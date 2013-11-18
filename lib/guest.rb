@@ -8,7 +8,6 @@ class Guest
   end
 
   def update(params = {})
-    puts params
     @first_name = params[:first_name] if params[:first_name]
     @last_name = params[:last_name] if params[:last_name]
     add_drink_to_user(params[:drink_id])

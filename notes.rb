@@ -1,3 +1,5 @@
+#Put specs in proper order
+
 # Draw diagrams 
 
 # Drinks is the current in memorory persistance layer.  Needs to be replaced with SQLite & AR
