@@ -7,7 +7,7 @@ describe DrinkApp do
 
   describe 'the home page' do
     it 'loads home page' do
-      get "/" 
+      get '/' 
       last_response.should be_ok
     end
   end
@@ -30,13 +30,6 @@ describe DrinkApp do
       AR::Drink.should_receive(:new)
       post '/drinks'
     end
-
-    # it 'sends a new drink object to the ActiveRecord interface' do
-    #   mock = MockDatastore.new
-    #   AR::Drink.should_receive(:for).and_return(mock)
-    #   post '/drinks', @params
-    #   mock.item.booze == 'vodka'
-    # end
 
     it 'displays a list of all drinks' do
       get '/drinks'
@@ -61,40 +54,41 @@ describe DrinkApp do
 
     it 'fetches the drink by id' do
       AR::Drink.should_receive(:find_by_id).with(@drink.id)
-      put "drink/#{@drink.id}"
+      put 'drink/#{@drink.id}'
     end
 
     it 'updates a specific drink' do
       new_params = {:booze =>"rum"}
-      put "drink/#{@drink.id}", new_params
+      put 'drink/#{@drink.id}', new_params
       @drink.reload
       @drink.booze.should == 'rum'
     end
 
-  #   it 'renders the show page after updating a drink' do
-  #     put "drink/#{@drink.id}"
-  #     last_response.should be_ok
-  #   end
+    it 'renders the show page after updating a drink' do
+      put 'drink/#{@drink.id}'
+      last_response.should be_ok
+    end
 
-  #   it 'loads a specific drink for the delete view' do
-  #     AR::Drink.should_receive(:find_by_id).with(@drink.id)
-  #     get "drink/#{@drink.id}/delete"
-  #   end
+    # it 'loads a specific drink for the delete view' do
+    #   # How do I get it to the delete view??? 
+    #   AR::Drink.should_receive(:find_by_id).with(@drink.id)
+    #   delete "drink/#{@drink.id}/delete"
+    # end
 
-  #   it 'succesfully renders the show page' do
-  #     get "drink/#{@drink.id}/delete"
-  #     last_response.should be_ok
-  #   end
+    it 'succesfully renders the show page' do
+      get "drink/#{@drink.id}"
+      last_response.should be_ok
+    end
 
-  #   it 'deletes the drink by id' do
-  #     delete "/#{@drink.id}"
-  #     AR::Drink.find_by_id(@drink.id).should == nil
-  #   end
+    it 'deletes the drink by id' do
+      delete "/#{@drink.id}/delete"
+      AR::Drink.find_by_id(@drink.id).should == nil
+    end
 
-  #   it 'succesfully redirects to the drink index page after delete' do
-  #     delete "/#{@drink.id}"
-  #     last_response.should be_redirect
-  #   end
+    it 'succesfully redirects to the drink index page after delete' do
+      delete "/#{@drink.id}"
+      last_response.should be_redirect
+    end
   end
 
   describe 'Guests pages' do 
