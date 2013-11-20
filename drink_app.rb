@@ -51,10 +51,10 @@ class DrinkApp < Sinatra::Application
     erb '/drinks/edit'.to_sym
   end
 
-  delete 'drink/:id' do
+  delete '/drink/:id' do
     id = params[:id].to_i
     @drink = AR::Drink.find_by_id(id)
-    @drink = AR::Drink.delete_by_id(id)
+    @drink.destroy
     redirect '/drinks'
   end
 
