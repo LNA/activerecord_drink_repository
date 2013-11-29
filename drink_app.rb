@@ -69,8 +69,7 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/guests' do
-    guest_datastore_instance = Repository.for(:guest) 
-    @guests = guest_datastore_instance.all
+    @guests = AR::Guest.all
     erb 'guests/index'.to_sym
   end
 

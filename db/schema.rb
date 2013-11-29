@@ -21,4 +21,11 @@ ActiveRecord::Schema.define(version: 20131110010036) do
 
   add_index "drinks", ["id"], name: "index_drinks_on_id"
 
+  create_table "guests", force: true do |t|
+    t.string "first_name"
+    t.string "last_name"
+  end
+
+  add_index "guests", ["id"], name: "index_guests_on_id"
+
 end

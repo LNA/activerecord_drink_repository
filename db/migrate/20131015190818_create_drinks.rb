@@ -6,12 +6,11 @@ class CreateDrinks < ActiveRecord::Migration
       drink.string     :mixer
       drink.string     :name
 
-      drink.timestamp
     end
     add_index :drinks, :id 
   end
 
   def down
-    drop_table :drinks 
+    drop_table :drinks
   end
 end
