@@ -132,45 +132,49 @@ describe DrinkApp do
       @guest.save
     end
 
-    it 'returns the guest id' do
-      AR::Guest.and_return(:id)
-      post '/guests'
+    context 'get guest' do
+
+      it 'returns the guest id' do
+        AR::Guest.should_receive(:find_by_id).with(@guest.id).and_call_original
+        get "guest/#{@guest.id}"
+        last_response.should be_ok
+      end
     end
 
-    it 'fetches the guest to update from the repository' do
-      Repository.for(:guest).should_receive(:find_by_id).with(1)
-      put "guest/1"
+    context 'update guest' do
+      it 'updates a specific guest' do
+        params = {:first_name =>"Cindy"}
+        put "guest/#{@guest.id}", params
+        @guest.reload
+        @guest.first_name.should == "Cindy"
+      end
+
+      it 'renders the show page after updating a guest' do
+        put "guest/#{@guest.id}"
+        last_response.should be_redirect
+      end
     end
 
-    it 'updates a specific guest' do
-      params = {"first_name" =>"Cindy", "splat"=>[], "captures"=>["#{@guest.id}"], "id"=>"#{@guest.id}"}
-      @guest.should_receive(:update).with(params)
-      put "guest/#{@guest.id}", params
-    end
+    context 'deleting a guest' do
+      it 'loads a specific guest for the delete view' do
+        AR::Guest.should_receive(:find_by_id).with(@guest.id)
+        get "guest/#{@guest.id}"
+      end
 
-    it 'renders the show page after updating a guest' do
-      put "guest/#{@guest.id}"
-      last_response.should be_redirect
-    end
+      it 'succesfully renders the show page' do
+        get "guest/#{@guest.id}"
+        last_response.should be_ok
+      end
 
-    it 'loads a specific guest for the delete view' do
-      Repository.for(:guest).should_receive(:find_by_id).with(@guest.id)
-      get "guest/#{@guest.id}/delete"
-    end
+      it 'deletes the guest by id' do
+        delete "guest/#{@guest.id}"
+        AR::Guest.find_by_id(@guest.id).should == nil
+      end
 
-    it 'sucessfully renders the delete page' do
-      get "guest/#{@guest.id}/delete"
-      last_response.should be_ok
-    end
-
-    it 'deletes a guest by id' do
-      delete "guest/#{@guest.id}"
-      Repository.for(:guest).find_by_id(@guest.id).should == nil
-    end
-
-    it 'successfully redirects to the guest index page after delete' do
-      delete "guest/#{@guest.id}"
-      last_response.should be_redirect
+      it 'successfully redirects to the guest index page after delete' do
+        delete "guest/#{@guest.id}"
+        last_response.should be_redirect
+      end
     end
   end
 end

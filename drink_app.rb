@@ -41,6 +41,9 @@ class DrinkApp < Sinatra::Application
     id = params[:id].to_i
     @drink = AR::Drink.find_by_id(id)
     @drink.update_attributes(:booze => params[:booze])
+    @drink.update_attributes(:mixer => params[:mixer])
+    @drink.update_attributes(:glass => params[:glass])
+    @drink.update_attributes(:name => params[:name])
     @drink.save
     erb 'drinks/show'.to_sym
   end
@@ -75,34 +78,29 @@ class DrinkApp < Sinatra::Application
 
   get '/guest/:id' do
     id = params[:id].to_i
-    @guest = Repository.for(:guest).find_by_id(id)
-    drink_datastore_instance = Repository.for(:drink) 
-    @drinks = drink_datastore_instance.all
+    @guest = AR::Guest.find_by_id(id)
     erb '/guests/show'.to_sym
   end
 
   put '/guest/:id' do
     id = params[:id].to_i
-    @guest = Repository.for(:guest).find_by_id(id)
-    @guest.update(params)
+    @guest = AR::Guest.find_by_id(id)
+    @guest.update_attributes(:first_name => params[:first_name])
+    @guest.update_attributes(:last_name => params[:last_name])
+    @guest.save
     redirect "/guest/#{id}"
   end
 
   get '/guest/:id/edit' do
     id = params[:id].to_i
-    @guest = Repository.for(:guest).find_by_id(id)
+    @guest = AR::Guest.find_by_id(id)
     erb '/guests/edit'.to_sym
   end
 
   delete '/guest/:id' do
     id = params[:id].to_i
-    @guest = Repository.for(:guest).delete_by_id(id)
+    @guest = AR::Guest.delete_by_id(id)
+    @guest.destroy
     redirect '/guests'
-  end
-
-  get '/guest/:id/delete' do
-    id = params[:id].to_i
-    @guest = Repository.for(:guest).find_by_id(id)
-    erb 'guests/delete'.to_sym
   end
 end
