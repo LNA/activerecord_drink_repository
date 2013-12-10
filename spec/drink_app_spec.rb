@@ -28,7 +28,7 @@ describe DrinkApp do
 
     it 'creates a new drink object' do
       AR::Drink.should_receive(:new)
-      post '/drinks'
+      post '/drinks', @params 
     end
 
     it 'displays a list of all drinks' do
@@ -133,7 +133,6 @@ describe DrinkApp do
     end
 
     context 'get guest' do
-
       it 'returns the guest id' do
         AR::Guest.should_receive(:find_by_id).with(@guest.id).and_call_original
         get "guest/#{@guest.id}"
@@ -156,16 +155,6 @@ describe DrinkApp do
     end
 
     context 'deleting a guest' do
-      it 'loads a specific guest for the delete view' do
-        AR::Guest.should_receive(:find_by_id).with(@guest.id)
-        get "guest/#{@guest.id}"
-      end
-
-      it 'succesfully renders the show page' do
-        get "guest/#{@guest.id}"
-        last_response.should be_ok
-      end
-
       it 'deletes the guest by id' do
         delete "guest/#{@guest.id}"
         AR::Guest.find_by_id(@guest.id).should == nil
@@ -174,6 +163,27 @@ describe DrinkApp do
       it 'successfully redirects to the guest index page after delete' do
         delete "guest/#{@guest.id}"
         last_response.should be_redirect
+      end
+    end
+
+    context 'guests drinks' do
+      let(:params) { {:booze => 'vodka',
+                      :mixer => 'water',
+                      :glass => 'rocks',
+                      :name =>  'drink1'} }
+      let(:drink) {AR::Drink.create(params)}
+
+      it 'should create a drink guest relationship' do
+        put "guest_drinks/#{@guest.id}/#{drink.id}"
+        @guest.drinks.should include(drink)
+      end
+
+      it 'deletes a guests drink' do
+        @drinks_guest = AR::DrinksGuests.create(:guest_id => @guest.id,
+                                :drink_id => drink.id)
+        delete "/guest_drinks/#{@guest.id}/#{drink.id}"
+        AR::DrinksGuests.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil
+        # AR::DrinksGuests.where("drink_id = ? AND guest_id = ?", drink.id, @guest.id).should == []
       end
     end
   end

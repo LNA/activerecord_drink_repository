@@ -1,9 +1,9 @@
 $: << File.expand_path(File.dirname(__FILE__)) + '/../'
 $: << File.expand_path(File.dirname(__FILE__)) + '/../lib/'
+ENV["RACK_ENV"] = "test"
 
 require 'rack/test'
 require 'drink_app'
-
 
 def app
   Sinatra::Application

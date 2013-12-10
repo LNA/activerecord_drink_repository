@@ -7,6 +7,7 @@ require './environment'
 require './seed'
 require './ar_drink'
 require './ar_guest'
+require './ar_drinks_guests'
 
 # AR::Seed.drinks
 # Seed.guests
@@ -22,6 +23,8 @@ class DrinkApp < Sinatra::Application
 
   post '/drinks' do
     @drink = AR::Drink.new(params)
+    require 'pry'
+    binding.pry
     @drink.save
     erb '/drinks/show'.to_sym
   end
@@ -68,25 +71,27 @@ class DrinkApp < Sinatra::Application
   post '/guests' do
     @guest = AR::Guest.new(params)
     @guest.save
-    erb '/guests/show'.to_sym
+    redirect '/guests/show'.to_sym
   end
 
   get '/guests' do
     @guests = AR::Guest.all
+    @drinks = AR::Drink.all
     erb 'guests/index'.to_sym
   end
 
   get '/guest/:id' do
     id = params[:id].to_i
     @guest = AR::Guest.find_by_id(id)
+    @drinks = AR::Drink.all
     erb '/guests/show'.to_sym
   end
 
   put '/guest/:id' do
     id = params[:id].to_i
     @guest = AR::Guest.find_by_id(id)
-    @guest.update_attributes(:first_name => params[:first_name])
-    @guest.update_attributes(:last_name => params[:last_name])
+    @guest.update_attributes(:first_name => params[:first_name],
+                             :last_name => params[:last_name])
     @guest.save
     redirect "/guest/#{id}"
   end
@@ -99,8 +104,25 @@ class DrinkApp < Sinatra::Application
 
   delete '/guest/:id' do
     id = params[:id].to_i
-    @guest = AR::Guest.delete_by_id(id)
+    @guest = AR::Guest.find_by_id(id)
     @guest.destroy
     redirect '/guests'
+  end
+
+  put '/guest_drinks/:guest_id/:drink_id' do
+    guest_id = params[:guest_id]
+    AR::DrinksGuests.create(:guest_id => guest_id,
+                            :drink_id => params[:drink_id])
+    redirect "/guest/#{guest_id}"
+  end
+
+  delete '/guest_drinks/:guest_id/:drink_id' do
+    guest_id = params[:guest_id]
+    drink_id = params[:drink_id]
+    @drinks_guests = AR::DrinksGuests.where("drink_id = ? AND guest_id = ?", drink_id, guest_id)
+    # require 'pry'
+    # binding.pry
+    @drinks_guests.first.destroy
+    redirect "/guest/#{guest_id}"
   end
 end

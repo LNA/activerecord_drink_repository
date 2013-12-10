@@ -12,7 +12,7 @@
     <li>
       <%= drink.name %> - <%= drink.booze %> - 
       <%= drink.mixer %> - <%= drink.glass %>
-     <form action="/guest/<%= @guest.id %>" method="post">
+     <form action="/guest_drinks/<%= @guest.id %>/<%= drink.id %>" method="post">
       <input type="hidden" name="_method" value="put">
 	    <input type="hidden" name="drink_id" value= <%= drink.id%>>  
 	    <input type="submit" value="Yes, Add this drink!">  
@@ -22,10 +22,15 @@
  </ul>
 </p>  
 <p>
+  This Guests Drinks:
   <ul>
   <% @guest.drinks.each do |drink| %>
   <li>
     <%= drink.name %>
+    <form action="/guest_drinks/<%= @guest.id %>/<%= drink.id %>" method="post">  
+    <input type="hidden" name="_method" value="delete">  
+    <input type="submit" value="Yes, Delete This Drink!">  
+  </form> 
   </li>
   <% end %>
 </ul>
@@ -41,6 +46,8 @@
 <p>
   <a href="/guest/<%= @guest.id %>/edit">Edit This Guest</a>
 </p>
-<p>
-  <a href="/guest/<%= @guest.id %>/delete">Delete This Guest</a>
-</p>
+
+<form action="/guest/<%= @guest.id %>" method="post">  
+<input type="hidden" name="_method" value="delete">  
+<input type="submit" value="Delete This Guest!">  
+</form> 
