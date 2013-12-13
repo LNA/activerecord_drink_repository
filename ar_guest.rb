@@ -1,5 +1,6 @@
 module AR
 	class Guest < ActiveRecord::Base
-		has_and_belongs_to_many :drinks
+		has_many :drinks_guests
+		has_many :drinks, :through => :drinks_guests
 	end
 end
