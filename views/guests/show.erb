@@ -27,10 +27,6 @@
   <% @guest.drinks.each do |drink| %>
   <li>
     <%= drink.name %>
-    <form action="/guest_drinks/<%= @guest.id %>/<%= drink.id %>" method="post">  
-    <input type="hidden" name="_method" value="delete">  
-    <input type="submit" value="Yes, Delete This Drink!">  
-  </form> 
   </li>
   <% end %>
 </ul>

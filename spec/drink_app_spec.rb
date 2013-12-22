@@ -12,7 +12,7 @@ describe DrinkApp do
     end
   end
 
-  describe 'Drinks pages' do
+  describe 'AR::Drinks pages' do
     before :each do
       @params = {:booze => 'vodka',
                :mixer => 'water',
@@ -173,17 +173,16 @@ describe DrinkApp do
                       :name =>  'drink1'} }
       let(:drink) {AR::Drink.create(params)}
 
-      it 'should create a drink guest relationship' do
-        put "guest_drinks/#{@guest.id}/#{drink.id}"
-        @guest.drinks.should include(drink)
-      end
+      # it 'should create a drink guest relationship' do
+      #   put "guest_drinks/#{@guest.id}/#{drink.id}"
+      #   @guest.drinks.should include(drink)
+      # end
 
       it 'deletes a guests drink' do
         @drinks_guest = AR::DrinksGuests.create(:guest_id => @guest.id,
                                 :drink_id => drink.id)
         delete "/guest_drinks/#{@guest.id}/#{drink.id}"
         AR::DrinksGuests.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil
-        # AR::DrinksGuests.where("drink_id = ? AND guest_id = ?", drink.id, @guest.id).should == []
       end
     end
   end

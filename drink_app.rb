@@ -9,7 +9,7 @@ require './ar_drink'
 require './ar_guest'
 require './ar_drinks_guests'
 
-# AR::Seed.drinks
+# Seed.drinks
 # Seed.guests
 
 class DrinkApp < Sinatra::Application
@@ -81,7 +81,7 @@ class DrinkApp < Sinatra::Application
   get '/guest/:id' do
     id = params[:id].to_i
     @guest = AR::Guest.find_by_id(id)
-    @drinks = AR::Drink.all
+    @drinks = AR::Drink.all 
     erb '/guests/show'.to_sym
   end
 
@@ -111,6 +111,7 @@ class DrinkApp < Sinatra::Application
     guest_id = params[:guest_id]
     AR::DrinksGuests.create(:guest_id => guest_id,
                             :drink_id => params[:drink_id])
+    
     redirect "/guest/#{guest_id}"
   end
 
@@ -118,8 +119,6 @@ class DrinkApp < Sinatra::Application
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
     @drinks_guests = AR::DrinksGuests.where("drink_id = ? AND guest_id = ?", drink_id, guest_id)
-    # require 'pry'
-    # binding.pry
     @drinks_guests.first.destroy
     redirect "/guest/#{guest_id}"
   end
