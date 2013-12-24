@@ -6,7 +6,7 @@ require 'sinatra/activerecord'
 require './environment'
 require './ar_drink'
 require './ar_guest'
-require './ar_drinks_guests'
+require './ar_orders'
 
 class DrinkApp < Sinatra::Application
   get '/' do
@@ -105,7 +105,7 @@ class DrinkApp < Sinatra::Application
 
   put '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
-    AR::DrinksGuests.create(:guest_id => guest_id,
+    AR::Orders.create(:guest_id => guest_id,
                             :drink_id => params[:drink_id])
     
     redirect "/guest/#{guest_id}"
@@ -114,7 +114,7 @@ class DrinkApp < Sinatra::Application
   delete '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
-    @drinks_guests = AR::DrinksGuests.where("drink_id = ? AND guest_id = ?", drink_id, guest_id)
+    @drinks_guests = AR::Orders.where("drink_id = ? AND guest_id = ?", drink_id, guest_id)
     @drinks_guests.first.destroy
     redirect "/guest/#{guest_id}"
   end

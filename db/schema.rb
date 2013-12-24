@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131217000027) do
+ActiveRecord::Schema.define(version: 20131224051251) do
 
   create_table "drinks", force: true do |t|
     t.string "booze"
@@ -35,5 +35,13 @@ ActiveRecord::Schema.define(version: 20131217000027) do
   end
 
   add_index "guests", ["id"], name: "index_guests_on_id"
+
+  create_table "orders", force: true do |t|
+    t.integer "drink_id"
+    t.integer "guest_id"
+    t.integer "quantity"
+  end
+
+  add_index "orders", ["guest_id"], name: "index_orders_on_guest_id"
 
 end

@@ -1,8 +1,8 @@
 module AR
 	class Guest < ActiveRecord::Base
-		has_many :drinks_guests, class_name: "DrinksGuests"
+		has_many :orders, class_name: "Orders"
 		def drinks			
-			AR::DrinksGuests.where("guest_id = ?", self.id).map do |relationship|
+			AR::Orders.where("guest_id = ?", self.id).map do |relationship|
 				relationship.drink			
 			end
 		end

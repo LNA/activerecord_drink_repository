@@ -105,6 +105,7 @@ describe DrinkApp do
       last_response.should be_ok
     end
 
+
     it 'creates a new guest object' do
       AR::Guest.should_receive(:new)
       post '/guests'
@@ -179,10 +180,10 @@ describe DrinkApp do
       # end
 
       it 'deletes a guests drink' do
-        @drinks_guest = AR::DrinksGuests.create(:guest_id => @guest.id,
+        @drinks_guest = AR::Orders.create(:guest_id => @guest.id,
                                 :drink_id => drink.id)
         delete "/guest_drinks/#{@guest.id}/#{drink.id}"
-        AR::DrinksGuests.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil
+        AR::Orders.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil
       end
     end
   end
