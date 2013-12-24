@@ -4,7 +4,6 @@ Dir[File.dirname(__FILE__) + '/lib/models/*.rb'].each {|file| require file }
 require 'sinatra'
 require 'sinatra/activerecord'
 require './environment'
-require './seed'
 require './ar_drink'
 require './ar_guest'
 require './ar_drinks_guests'
