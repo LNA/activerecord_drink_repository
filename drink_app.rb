@@ -9,9 +9,6 @@ require './ar_drink'
 require './ar_guest'
 require './ar_drinks_guests'
 
-# Seed.drinks
-# Seed.guests
-
 class DrinkApp < Sinatra::Application
   get '/' do
     'Welcome to Drink App.'
