@@ -37,10 +37,10 @@ class DrinkApp < Sinatra::Application
   put '/drink/:id' do
     id = params[:id].to_i
     @drink = AR::Drink.find_by_id(id)
-    @drink.update_attributes(:booze => params[:booze])
-    @drink.update_attributes(:mixer => params[:mixer])
-    @drink.update_attributes(:glass => params[:glass])
-    @drink.update_attributes(:name => params[:name])
+    @drink.update_attributes(:booze => params[:booze],
+                             :mixer => params[:mixer],
+                             :glass => params[:glass], 
+                             :name =>  params[:name])
     @drink.save
     erb 'drinks/show'.to_sym
   end
@@ -106,7 +106,7 @@ class DrinkApp < Sinatra::Application
   put '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     AR::Orders.create(:guest_id => guest_id,
-                            :drink_id => params[:drink_id])
+                      :drink_id => params[:drink_id])
     
     redirect "/guest/#{guest_id}"
   end
@@ -114,7 +114,8 @@ class DrinkApp < Sinatra::Application
   delete '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
-    @drinks_guests = AR::Orders.where("drink_id = ? AND guest_id = ?", drink_id, guest_id)
+    @drinks_guests = AR::Orders.where("drink_id = ? AND guest_id = ?", 
+                                      drink_id, guest_id)
     @drinks_guests.first.destroy
     redirect "/guest/#{guest_id}"
   end
