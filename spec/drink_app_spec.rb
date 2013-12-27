@@ -180,7 +180,7 @@ describe DrinkApp do
       # end
 
       it 'deletes a guests drink' do
-        @drinks_guest = AR::Orders.create(:guest_id => @guest.id,
+        @orders = AR::Orders.create(:guest_id => @guest.id,
                                 :drink_id => drink.id)
         delete "/guest_drinks/#{@guest.id}/#{drink.id}"
         AR::Orders.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil

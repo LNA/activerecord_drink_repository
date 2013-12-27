@@ -114,9 +114,9 @@ class DrinkApp < Sinatra::Application
   delete '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
-    @drinks_guests = AR::Orders.where("drink_id = ? AND guest_id = ?", 
+    @orders = AR::Orders.where("drink_id = ? AND guest_id = ?", 
                                       drink_id, guest_id)
-    @drinks_guests.first.destroy
+    @orders.first.destroy
     redirect "/guest/#{guest_id}"
   end
 end
