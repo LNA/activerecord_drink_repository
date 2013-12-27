@@ -11,6 +11,15 @@
   <%= @drink.glass%>  
 </p> 
 <p>  The Following Guests Have Ordered This Drink:
+  <ul>
+  <% @drink.guests.each do |guest| %>
+  <li>
+    <%= guest.first_name %>
+    <%= guest.last_name %>
+
+  </li>
+    <% end %>
+  </ul>
 </p>
 <p>
   <a href="/drinks/new">Add A New Drink</a>

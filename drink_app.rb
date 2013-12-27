@@ -20,8 +20,6 @@ class DrinkApp < Sinatra::Application
   post '/drinks' do
     @drink = AR::Drink.new(params)
     @drink.save
-    require 'pry'
-    binding.pry
     erb '/drinks/show'.to_sym
   end
 
