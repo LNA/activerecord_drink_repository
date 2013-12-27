@@ -20,6 +20,8 @@ class DrinkApp < Sinatra::Application
   post '/drinks' do
     @drink = AR::Drink.new(params)
     @drink.save
+    require 'pry'
+    binding.pry
     erb '/drinks/show'.to_sym
   end
 
@@ -65,7 +67,7 @@ class DrinkApp < Sinatra::Application
   post '/guests' do
     @guest = AR::Guest.new(params)
     @guest.save
-    redirect '/guests/show'.to_sym
+    redirect '/guests'.to_sym
   end
 
   get '/guests' do
@@ -107,7 +109,7 @@ class DrinkApp < Sinatra::Application
     guest_id = params[:guest_id]
     AR::Orders.create(:guest_id => guest_id,
                       :drink_id => params[:drink_id])
-    
+
     redirect "/guest/#{guest_id}"
   end
 
