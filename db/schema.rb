@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131224051251) do
+ActiveRecord::Schema.define(version: 20131227195847) do
 
   create_table "drinks", force: true do |t|
     t.string "booze"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20131224051251) do
   create_table "orders", force: true do |t|
     t.integer "drink_id"
     t.integer "guest_id"
-    t.integer "quantity"
+    t.integer "quantity", default: 0
   end
 
   add_index "orders", ["guest_id"], name: "index_orders_on_guest_id"

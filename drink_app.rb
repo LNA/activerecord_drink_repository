@@ -20,6 +20,8 @@ class DrinkApp < Sinatra::Application
   post '/drinks' do
     @drink = AR::Drink.new(params)
     @drink.save
+    require 'pry'
+    binding.pry
     erb '/drinks/show'.to_sym
   end
 
@@ -76,6 +78,7 @@ class DrinkApp < Sinatra::Application
 
   get '/guest/:id' do
     id = params[:id].to_i
+
     @guest = AR::Guest.find_by_id(id)
     @drinks = AR::Drink.all 
     erb '/guests/show'.to_sym
@@ -105,18 +108,26 @@ class DrinkApp < Sinatra::Application
 
   put '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
-    AR::Orders.create(:guest_id => guest_id,
-                      :drink_id => params[:drink_id])
-
+    drink_id = params[:drink_id]
+    order = AR::Orders.find_or_create_by(guest_id: guest_id, drink_id: drink_id)
+    order.quantity += 1
+    order.save
     redirect "/guest/#{guest_id}"
   end
 
   delete '/guest_drinks/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
-    @orders = AR::Orders.where("drink_id = ? AND guest_id = ?", 
-                                      drink_id, guest_id)
-    @orders.first.destroy
+    
+    order = AR::Orders.find_by(guest_id: guest_id, drink_id: drink_id)
+
+    if order.quantity == 1
+      order.destroy
+    else
+      order.quantity -= 1
+      order.save
+    end
+
     redirect "/guest/#{guest_id}"
   end
 end

@@ -167,23 +167,46 @@ describe DrinkApp do
       end
     end
 
-    context 'guests drinks' do
+    context 'orders' do
+      before :each do
+        AR::Orders.destroy_all
+      end
+
       let(:params) { {:booze => 'vodka',
                       :mixer => 'water',
                       :glass => 'rocks',
                       :name =>  'drink1'} }
       let(:drink) {AR::Drink.create(params)}
 
-      # it 'should create a drink guest relationship' do
-      #   put "guest_drinks/#{@guest.id}/#{drink.id}"
-      #   @guest.drinks.should include(drink)
-      # end
+      it 'creates an order for a guest' do
+        put "guest_drinks/#{@guest.id}/#{drink.id}"
+        @guest.orders.count.should == 1
+      end
 
-      it 'deletes a guests drink' do
+      it 'updates the quantity as 1 the first time a drink is ordered' do
+        put "guest_drinks/#{@guest.id}/#{drink.id}"
+        @guest.orders.first.quantity.should == 1
+      end
+
+      it 'increments the quantity by 1 if the same order is made twice' do
+        put "guest_drinks/#{@guest.id}/#{drink.id}"
+        put "guest_drinks/#{@guest.id}/#{drink.id}"
+        @guest.orders.first.quantity.should == 2
+      end
+
+      it 'deletes a guests drink if quantity was 1' do
         @orders = AR::Orders.create(:guest_id => @guest.id,
-                                :drink_id => drink.id)
+                                    :drink_id => drink.id,
+                                    :quantity => 1)
         delete "/guest_drinks/#{@guest.id}/#{drink.id}"
         AR::Orders.find_by_drink_id_and_guest_id(drink.id, @guest.id).should == nil
+      end
+
+      it 'reduces the quantity by 1 of an order if quantity was greater than 1' do
+        AR::Orders.create(:guest_id => @guest.id, :drink_id => drink.id, :quantity => 2)
+        delete "/guest_drinks/#{@guest.id}/#{drink.id}"
+        @guest.orders.count.should == 1
+        @guest.orders.first.quantity.should == 1
       end
     end
   end

@@ -24,9 +24,10 @@
 <p>
   This Guests Drinks:
   <ul>
-  <% @guest.drinks.each do |drink| %>
+  <% @guest.orders.each do |order| %>
   <li>
-    <%= drink.name %>
+    <%= order.drink.name %>
+    <%= order.quantity %>
   </li>
     <% end %>
   </ul>
@@ -46,4 +47,4 @@
 <form action="/guest/<%= @guest.id %>" method="post">  
 <input type="hidden" name="_method" value="delete">  
 <input type="submit" value="Delete This Guest!">  
-</form> 
+</form>
