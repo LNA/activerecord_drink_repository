@@ -106,7 +106,7 @@ class DrinkApp < Sinatra::Application
     redirect '/guests'
   end
 
-  put '/guest_drinks/:guest_id/:drink_id' do
+  put '/orders/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
     order = AR::Orders.find_or_create_by(guest_id: guest_id, drink_id: drink_id)
@@ -115,7 +115,7 @@ class DrinkApp < Sinatra::Application
     redirect "/guest/#{guest_id}"
   end
 
-  delete '/guest_drinks/:guest_id/:drink_id' do
+  delete '/orders/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
     
