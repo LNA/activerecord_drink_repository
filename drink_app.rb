@@ -4,9 +4,9 @@ Dir[File.dirname(__FILE__) + '/lib/models/*.rb'].each {|file| require file }
 require 'sinatra'
 require 'sinatra/activerecord'
 require './environment'
-require './ar_drink'
-require './ar_guest'
-require './ar_orders'
+require 'ar_drink'
+require 'ar_guest'
+require 'ar_orders'
 
 class DrinkApp < Sinatra::Application
   get '/' do

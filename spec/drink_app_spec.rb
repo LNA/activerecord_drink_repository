@@ -21,6 +21,10 @@ describe DrinkApp do
       @drink = AR::Drink.new(@params)
     end
 
+    after :each do
+      @drink.destroy
+    end
+
     it 'displays the form for creating new drinks' do
       get '/drinks/new'
       last_response.should be_ok
@@ -45,6 +49,10 @@ describe DrinkApp do
                :name =>  'drink1'}
       @drink = AR::Drink.new(params)
       @drink.save
+    end
+
+    after :each do
+      @drink.destroy
     end
 
     context 'get drink' do
@@ -100,6 +108,10 @@ describe DrinkApp do
       @guest = AR::Guest.new(params)
     end
 
+    after :each do
+      @guest.destroy
+    end
+
     it 'displays the new guest page' do
       get '/guests/new'
       last_response.should be_ok
@@ -131,6 +143,10 @@ describe DrinkApp do
                :last_name => 'Crew'}
       @guest= AR::Guest.new(params)
       @guest.save
+    end
+
+    after :each do
+      @guest.destroy
     end
 
     context 'get guest' do
