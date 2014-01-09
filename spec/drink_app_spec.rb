@@ -13,6 +13,7 @@ describe DrinkApp do
   end
 
   describe 'AR::Drinks pages' do
+    
     before :each do
       @params = {:booze => 'vodka',
                :mixer => 'water',
@@ -42,6 +43,7 @@ describe DrinkApp do
   end
 
   describe 'Pages for a single drink' do
+    
     before :each do
       params = {:booze => 'vodka',
                :mixer => 'water',
