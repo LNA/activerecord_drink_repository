@@ -15,6 +15,11 @@
 
 
 }
+td, th {
+  border: 1px solid #999;
+  padding: 0.5rem;
+  text-align: left;
+}
 
 </style>
 <div class="guest">
@@ -30,7 +35,6 @@
   </p>
 </div>
 
- 
   <table>
     <tr>
       <th>Drink Name</th>
@@ -39,6 +43,8 @@
       <th>     /     </th>
       <th>     -   </th>
     </tr>
+
+
 
   <% @guest.orders.each do |order| %>
 
@@ -65,16 +71,20 @@
 </div>
 
   <ul>
-  <% @drinks.each do |drink| %>
-    <li>
-      <%= drink.name %> - <%= drink.booze %> - 
-      <%= drink.mixer %> - <%= drink.glass %>
-     <form action="/orders/<%= @guest.id %>/<%= drink.id %>" method="post">
-      <input type="hidden" name="_method" value="put">
-	    <input type="hidden" name="drink_id" value= <%= drink.id%>>  
-	    <input type="submit" value="Yes, Add this drink!">  
-    </form>  
-    </li>
+  <% @drinks.keys.sort.each do |starting_letter| %>
+    <%= starting_letter %>
+    <% @drinks[starting_letter].each do |drink| %>
+      <li>
+        <%= drink.name %> - <%= drink.booze %> - 
+        <%= drink.mixer %> - <%= drink.glass %>
+       <form action="/orders/<%= @guest.id %>/<%= drink.id %>" method="post">
+        <input type="hidden" name="_method" value="put">
+  	    <input type="hidden" name="drink_id" value= <%= drink.id%>>  
+  	    <input type="submit" value="Yes, Add this drink!">  
+       </form>  
+      </li>
+    <% end %>
+
   <% end %>
  </ul>
 </p>  

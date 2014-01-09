@@ -78,7 +78,7 @@ class DrinkApp < Sinatra::Application
     id = params[:id].to_i
 
     @guest = AR::Guest.find_by_id(id)
-    @drinks = AR::Drink.all 
+    @drinks = AR::Drink.all.group_by{|drink| drink.name[0]}
     erb '/guests/show'.to_sym
   end
 
