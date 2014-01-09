@@ -15,6 +15,11 @@ class DrinkApp < Sinatra::Application
     @drink = AR::Drink.find_by_id(id)
   end
 
+  def find_guest_by_id
+    id = params[:id].to_i
+    @guest = AR::Guest.find_by_id(id)
+  end
+
   get '/' do
     'Welcome to Drink App.'
   end
@@ -77,16 +82,13 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/guest/:id' do
-    id = params[:id].to_i
-
-    @guest = AR::Guest.find_by_id(id)
+    find_guest_by_id
     @drinks = AR::Drink.order("lower(name)")
     erb '/guests/show'.to_sym
   end
 
   put '/guest/:id' do
-    id = params[:id].to_i
-    @guest = AR::Guest.find_by_id(id)
+    find_guest_by_id
     @guest.update_attributes(:first_name => params[:first_name],
                              :last_name => params[:last_name])
     @guest.save
@@ -94,14 +96,12 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/guest/:id/edit' do
-    id = params[:id].to_i
-    @guest = AR::Guest.find_by_id(id)
+    find_guest_by_id
     erb '/guests/edit'.to_sym
   end
 
   delete '/guest/:id' do
-    id = params[:id].to_i
-    @guest = AR::Guest.find_by_id(id)
+    find_guest_by_id
     @guest.destroy
     redirect '/guests'
   end
