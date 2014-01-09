@@ -1,25 +1,10 @@
 <p><font size="6"><b>  
   <%= @guest.first_name%>  <%= @guest.last_name %>  
 </font></b></p>
-<p>
-  Add A Drink To The Guest
 
-  <ul>
-  <% @drinks.each do |drink| %>
-    <li>
-      <%= drink.name %> - <%= drink.booze %> - 
-      <%= drink.mixer %> - <%= drink.glass %>
-     <form action="/orders/<%= @guest.id %>/<%= drink.id %>" method="post">
-      <input type="hidden" name="_method" value="put">
-	    <input type="hidden" name="drink_id" value= <%= drink.id%>>  
-	    <input type="submit" value="Yes, Add this drink!">  
-    </form>  
-    </li>
-  <% end %>
- </ul>
-</p>  
-<p>
-  This Guests Drinks:
+<p><font size="4"><b> 
+  Orders
+  </font></b>
   <ul>
   <% @guest.orders.each do |order| %>
   <li>
@@ -39,7 +24,23 @@
     <% end %>
   </ul>
 </p>
-
+<p><font size="4"><b> 
+  Drinks
+  </font></b>
+  <ul>
+  <% @drinks.each do |drink| %>
+    <li>
+      <%= drink.name %> - <%= drink.booze %> - 
+      <%= drink.mixer %> - <%= drink.glass %>
+     <form action="/orders/<%= @guest.id %>/<%= drink.id %>" method="post">
+      <input type="hidden" name="_method" value="put">
+	    <input type="hidden" name="drink_id" value= <%= drink.id%>>  
+	    <input type="submit" value="Yes, Add this drink!">  
+    </form>  
+    </li>
+  <% end %>
+ </ul>
+</p>  
 <p>
   <a href="/guests/new">Add A New Guest</a>
 </p>
