@@ -14,6 +14,12 @@
   text-align:center;
 
 }
+
+.orders_table
+{ 
+  border-spacing: 0.5rem;
+} 
+
 </style>
 <div class="guest">
   <p>  
@@ -29,25 +35,32 @@
 </div>
 
  
-  <ul>
+  <table>
+    <tr>
+      <th>Drink Name</th>
+      <th>Quantity</th>
+      <th>     +     </th>
+      <th>     /     </th>
+      <th>     -   </th>
+    </tr>
+
   <% @guest.orders.each do |order| %>
-  <li>
-    <%= order.drink.name %>
-    <%= order.quantity %>
-    <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
+
+    <th><%= order.drink.name %></th>
+    <th><%= order.quantity %></th>
+    <th><form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
       <input type="hidden" name="_method" value="put">
       <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
       <input type="submit" value="Reorder">  
-    </form>  
-    <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
+    </form></th>  
+    <th>          </th>
+    <th><form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
       <input type="hidden" name="_method" value="delete">
       <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
       <input type="submit" value="Void">  
-    </form>  
-  </li>
+    </form></th>  
     <% end %>
-  </ul>
-</p>
+  </table>
 
 <div class="box">
   <p>
