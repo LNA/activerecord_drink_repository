@@ -36,10 +36,7 @@ class DrinkApp < Sinatra::Application
 
   put '/drink/:id' do
     find_drink_by_id
-    @drink.update_attributes(:booze => params[:booze],
-                             :mixer => params[:mixer],
-                             :glass => params[:glass], 
-                             :name =>  params[:name])
+    update_drink_attributes
     @drink.save
     erb 'drinks/show'.to_sym
   end
@@ -79,8 +76,7 @@ class DrinkApp < Sinatra::Application
 
   put '/guest/:id' do
     find_guest_by_id
-    @guest.update_attributes(:first_name => params[:first_name],
-                             :last_name => params[:last_name])
+    update_guest_attributes
     @guest.save
     redirect "/guest/#{id}"
   end
@@ -108,11 +104,8 @@ class DrinkApp < Sinatra::Application
   delete '/orders/:guest_id/:drink_id' do
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
-    
     @order = AR::Orders.find_by(guest_id: guest_id, drink_id: drink_id)
-
     check_quantity
-
     redirect "/guest/#{guest_id}"
   end
 
@@ -128,6 +121,18 @@ class DrinkApp < Sinatra::Application
     @guest = AR::Guest.find_by_id(id)
   end
 
+  def update_drink_attributes
+    @drink.update_attributes(:booze => params[:booze],
+                             :mixer => params[:mixer],
+                             :glass => params[:glass], 
+                             :name =>  params[:name])
+  end
+
+  def update_guest_attributes
+    @guest.update_attributes(:first_name => params[:first_name],
+                             :last_name => params[:last_name])
+  end
+
   def check_quantity
     if @order.quantity == 1
       @order.destroy
@@ -137,4 +142,3 @@ class DrinkApp < Sinatra::Application
     end
   end
 end
-
