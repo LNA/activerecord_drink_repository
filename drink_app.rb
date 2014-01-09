@@ -10,16 +10,6 @@ require 'ar_orders'
 
 class DrinkApp < Sinatra::Application
 
-  def find_drink_by_id
-    id = params[:id].to_i
-    @drink = AR::Drink.find_by_id(id)
-  end
-
-  def find_guest_by_id
-    id = params[:id].to_i
-    @guest = AR::Guest.find_by_id(id)
-  end
-
   get '/' do
     'Welcome to Drink App.'
   end
@@ -119,15 +109,32 @@ class DrinkApp < Sinatra::Application
     guest_id = params[:guest_id]
     drink_id = params[:drink_id]
     
-    order = AR::Orders.find_by(guest_id: guest_id, drink_id: drink_id)
+    @order = AR::Orders.find_by(guest_id: guest_id, drink_id: drink_id)
 
-    if order.quantity == 1
-      order.destroy
-    else
-      order.quantity -= 1
-      order.save
-    end
+    check_quantity
 
     redirect "/guest/#{guest_id}"
   end
+
+  private
+
+  def find_drink_by_id
+    id = params[:id].to_i
+    @drink = AR::Drink.find_by_id(id)
+  end
+
+  def find_guest_by_id
+    id = params[:id].to_i
+    @guest = AR::Guest.find_by_id(id)
+  end
+
+  def check_quantity
+    if @order.quantity == 1
+      @order.destroy
+    else
+      @order.quantity -= 1
+      @order.save
+    end
+  end
 end
+
