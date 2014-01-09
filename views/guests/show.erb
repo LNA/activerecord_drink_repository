@@ -41,16 +41,18 @@
         <th>     -   </th>
       </tr>
     </thead>
-       
+<table>
 
+  <table>
 
     <tbody>
   <tr>
+    <hr></hr>
 
   <% @guest.orders.each do |order| %>
 
-    <td><%= order.drink.name %></td>
-    <td><%= order.quantity %></td>
+    <th><%= order.drink.name %></th>
+    <th><%= order.quantity %></th>
 
     <td>
       <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
