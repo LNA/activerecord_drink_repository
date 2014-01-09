@@ -16,6 +16,11 @@
 
 }
 
+td, th {
+  word-spacing: 10 em;
+  text-align: left;
+}
+
 
 </style>
 <div class="guest">
@@ -34,11 +39,13 @@
 <table>
     <thead>
       <tr>
-        <th>Drink Name</th>
-        <th>Quantity</th>
-        <th>     +     </th>
-        <th>     /     </th>
-        <th>     -   </th>
+        <th width="30%">Drink Name</th>
+        <th width="37%">QTY</th>
+        <th width="15%">     +     </th>
+        <th width="15%">     /    </th>
+        <th width="15%">     -    </th>
+
+
       </tr>
     </thead>
 <table>
@@ -48,29 +55,29 @@
     <tbody>
   <tr>
     <hr></hr>
+    <% @guest.orders.each do |order| %>
 
-  <% @guest.orders.each do |order| %>
+      <td width="9%"><%= order.drink.name %></td>
+      
+      <td width="6%"><%= order.quantity %></td>
 
-    <th><%= order.drink.name %></th>
-    <th><%= order.quantity %></th>
+      <td width="4%">
+        <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
+        <input type="hidden" name="_method" value="put">
+        <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
+        <input type="submit" value="Reorder">  
+        </form>
+      </td>  
 
-    <td>
-      <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
-      <input type="hidden" name="_method" value="put">
-      <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
-      <input type="submit" value="Reorder">  
-      </form>
-    </td>  
 
-    <td></td>
-
-    <td>
-      <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
-      <input type="hidden" name="_method" value="delete">
-      <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
-      <input type="submit" value="Void">  
-      </form>
-    </td>  
+      <td width="25%">
+        <form action="/orders/<%= @guest.id %>/<%= order.drink.id %>" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="order.drink.id" value= <%= order.quantity%>>  
+        <input type="submit" value="Void">  
+        </form>
+      </td>  
+      <td width="50%">
   </tr>
 
     <% end %>
@@ -83,10 +90,7 @@
   </p>
 </div>
   <dl>
-  <% @drinks.keys.sort.each do |starting_letter| %>
-    <% @drinks[starting_letter].each do |drink| %>
-        <dt>
-
+    <% @drinks.each do |drink| %>
         <%= drink.name %>
         <dd><form action="/orders/<%= @guest.id %>/<%= drink.id %>" method="post">
         <input type="hidden" name="_method" value="put">
@@ -94,7 +98,6 @@
   	    <input type="submit" value="Order">  
        </form> </dd>
      </dt>
-    <% end %>
   <% end %>
 </dl>
 

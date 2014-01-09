@@ -9,6 +9,11 @@ require 'ar_guest'
 require 'ar_orders'
 
 class DrinkApp < Sinatra::Application
+
+  # def new_drink
+  #   @drink = AR::Drink.new(params)
+  # end
+
   get '/' do
     'Welcome to Drink App.'
   end
@@ -24,7 +29,7 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/drinks' do 
-    @drinks = AR::Drink.all
+    @drinks = AR::Drink
     erb 'drinks/index'.to_sym
   end
 
@@ -69,8 +74,8 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/guests' do
-    @guests = AR::Guest.all
-    @drinks = AR::Drink.all
+    @guests = AR::Guest
+    @drinks = AR::Drink
     erb 'guests/index'.to_sym
   end
 
@@ -78,7 +83,7 @@ class DrinkApp < Sinatra::Application
     id = params[:id].to_i
 
     @guest = AR::Guest.find_by_id(id)
-    @drinks = AR::Drink.all.group_by{|drink| drink.name[0]}
+    @drinks = AR::Drink.order("lower(name)")
     erb '/guests/show'.to_sym
   end
 
