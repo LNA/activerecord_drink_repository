@@ -10,9 +10,10 @@ require 'ar_orders'
 
 class DrinkApp < Sinatra::Application
 
-  # def new_drink
-  #   @drink = AR::Drink.new(params)
-  # end
+  def find_drink_by_id
+    id = params[:id].to_i
+    @drink = AR::Drink.find_by_id(id)
+  end
 
   get '/' do
     'Welcome to Drink App.'
@@ -29,19 +30,17 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/drinks' do 
-    @drinks = AR::Drink
+    @drinks = AR::Drink.all
     erb 'drinks/index'.to_sym
   end
 
   get '/drink/:id' do
-    id = params[:id].to_i
-    @drink = AR::Drink.find_by_id(id)
+    find_drink_by_id
     erb '/drinks/show'.to_sym
   end
 
   put '/drink/:id' do
-    id = params[:id].to_i
-    @drink = AR::Drink.find_by_id(id)
+    find_drink_by_id
     @drink.update_attributes(:booze => params[:booze],
                              :mixer => params[:mixer],
                              :glass => params[:glass], 
@@ -51,14 +50,12 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/drink/:id/edit' do
-    id = params[:id].to_i
-    @drink = AR::Drink.find_by_id(id)
+    find_drink_by_id
     erb '/drinks/edit'.to_sym
   end
 
   delete '/drink/:id' do
-    id = params[:id].to_i
-    @drink = AR::Drink.find_by_id(id)
+    find_drink_by_id
     @drink.destroy
     redirect '/drinks'
   end
@@ -74,8 +71,8 @@ class DrinkApp < Sinatra::Application
   end
 
   get '/guests' do
-    @guests = AR::Guest
-    @drinks = AR::Drink
+    @guests = AR::Guest.all
+    @drinks = AR::Drink.all
     erb 'guests/index'.to_sym
   end
 
